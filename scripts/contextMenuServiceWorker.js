@@ -8,6 +8,23 @@ const getKey = () => {
     });
   });
 };
+
+const sendMessage = (content) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const activeTab = tabs[0].id;
+
+    chrome.tabs.sendMessage(
+      activeTab,
+      { message: "inject", content },
+      (response) => {
+        if (response.status === "failed") {
+          console.log("injection failed.");
+        }
+      }
+    );
+  });
+};
+
 const generate = async (prompt) => {
   // Get your API key from storage
   const key = await getKey();
@@ -36,6 +53,8 @@ const generate = async (prompt) => {
 
 const generateCompletionAction = async (info) => {
   try {
+    sendMessage("generating genious ideas...");
+
     const { selectionText } = info;
     const basePromptPrefix = `Concisely list 3 creative, forward-thinking business startup ideas relating to: `;
 
@@ -50,13 +69,17 @@ const generateCompletionAction = async (info) => {
     
     3 Business Startup Ideas: ${baseCompletion.text}
     
+
     Professional Pitch:
     `;
 
     // Call your second prompt
     const secondPromptCompletion = await generate(secondPrompt);
+    sendMessage(secondPromptCompletion.text);
+    console.log(secondPromptCompletion.text);
   } catch (error) {
     console.log(error);
+    sendMessage(error.toString());
   }
 };
 
