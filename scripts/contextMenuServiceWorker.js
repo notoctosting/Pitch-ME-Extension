@@ -40,8 +40,8 @@ const generate = async (prompt) => {
     body: JSON.stringify({
       model: "text-davinci-003",
       prompt: prompt,
-      temperature: 0.8,
-      max_tokens: 150,
+      temperature: 0.84,
+      max_tokens: 1000,
       frequency_penalty: 1.5,
     }),
   });
@@ -53,7 +53,7 @@ const generate = async (prompt) => {
 
 const generateCompletionAction = async (info) => {
   try {
-    sendMessage("generating genious ideas...");
+    sendMessage("generating genius ideas...");
 
     const { selectionText } = info;
     const basePromptPrefix = `Concisely list 3 creative, forward-thinking business startup ideas relating to: `;
@@ -62,7 +62,7 @@ const generateCompletionAction = async (info) => {
       `${basePromptPrefix}${selectionText}`
     );
     const secondPrompt = `
-    Take the 3 innovative business startup ideas below and choose the best, most insightful business idea: generate a professional startup business pitch for this idea: Go deep into why they should invest. Explain how this relates to the title. 
+    Take the 3 innovative business startup ideas below and choose the best, most insightful business idea: generate a professional startup business pitch for investors of this idea: Go deep into why they should invest. Explain how this relates to the title. 
     
     
     Title: ${selectionText}
